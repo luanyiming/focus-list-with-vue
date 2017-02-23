@@ -1,13 +1,15 @@
 <template>
   <div id="app">
     <h1 v-html='msg'></h1>
+    <input type="input" v-model='newItem' v-on:keyup.enter='addItem' name="">
     <ul>
-      <li v-for='i in items' v-html='i.label' v-bind:class='{finish:i.isFinished}'></li>
+      <li v-for='i in items' v-html='i.label' v-bind:class='[{finish:i.isFinished},listItem]' v-on:click='toggleFinish(i)'></li>
     </ul>
   </div>
 </template>
 
 <script>
+import Storage from './storage.js';
 export default {
   name: 'app',
 /*data:function(){
@@ -15,17 +17,31 @@ export default {
 }*/
   data(){
     return{
-      msg:'first',
-      items:[
-        {
-          label:'coding',
-          isFinished:false
-        },
-        {
-          label:'eat',
-          isFinished:true
-        }
-      ]
+      msg:'What is your main focus for today?',
+      listItem:'listItem',
+      items:Storage.read()||[],
+      newItem:''
+    }
+  },
+  watch:{
+    items:{
+      handler:function(val){
+        Storage.save(val)
+      },
+      deep:true
+    }
+  },
+  methods:{
+    toggleFinish: function(i){
+      console.log(i);
+      i.isFinished?i.isFinished = false:i.isFinished = true;
+    },
+    addItem: function(){
+      this.items.push({
+        label:this.newItem,
+        isFinished:false
+      }),
+      this.newItem = '';
     }
   }
 }
@@ -41,7 +57,9 @@ export default {
   margin-top: 60px;
 }
 .finish{
-  color: green;
-  font-weight: 700;
+   text-decoration:line-through;
+}
+.listItem{
+  cursor: pointer;
 }
 </style>
