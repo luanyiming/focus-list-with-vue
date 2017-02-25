@@ -1,6 +1,7 @@
-# vue_first
+# Focus List With Vue
 
-> A Vue.js project
+> 基于vue官方的构建工具vue-cli开发的简单应用
+> 实现了简单的添加任务，将任务列表添加到localstorage，后续会添加删除任务等其他任务，持续更新。
 
 ## Build Setup
 
